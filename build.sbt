@@ -1,5 +1,7 @@
 
-name := "kinja-play-aylien-client"
+name := "play-aylien-client"
+
+organization := "com.kinja"
 
 version := "0.1.0" //-SNAPSHOT"
 
