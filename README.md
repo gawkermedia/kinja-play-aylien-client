@@ -24,7 +24,7 @@ api.classifyByTaxonomy(new java.net.URL("http://techcrunch.com/2015/07/16/micros
 		case s: JsSuccess[ClassifyTaxonomy] => println(s);
 		case e: JsError => println("Errors: " + JsError.toFlatJson(e).toString())
 	} 
-}
+} recover { case e: AylienException => println(e.message) }
 
 ```
 

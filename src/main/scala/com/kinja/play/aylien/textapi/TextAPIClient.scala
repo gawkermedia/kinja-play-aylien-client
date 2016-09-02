@@ -9,6 +9,8 @@ import play.api.libs.ws.{ WSResponse, WSRequest, WSClient }
 import play.api.http.{ HeaderNames, MimeTypes }
 import com.kinja.play.aylien.textapi.model._
 
+case class AylienException(code: Int, message: String) extends Exception(message)
+
 /**
  * Configuration for [[TextApiClient]].
  *
@@ -57,16 +59,52 @@ final class TextApiClient(config: TextApiClientConfig) {
 			.get()
 	}
 
+	private def post(url: URL, params: Map[String, Seq[String]]): Future[WSResponse] = {
+		val request = config.client.url(url.toString)
+
+		logger.debug(s"GET $url")
+		logger.debug(s"params: $params")
+
+		request
+			.withHeaders(
+				HeaderNames.ACCEPT -> MimeTypes.JSON,
+				"X-AYLIEN-TextAPI-Application-Key" -> config.appKey,
+				"X-AYLIEN-TextAPI-Application-ID" -> config.appId)
+			.withRequestTimeout(config.requestTimeout.toMillis.toLong)
+			.post(params)
+	}
+
 	/**
 	 * http://docs.aylien.com/docs/classify-taxonomy
 	 * 
 	 * @param url The URL to analyise
-	 * @return A classification object
+	 * @return A classification object or an [[AylienException]] on error
 	 */
 	def classifyByTaxonomy(url: URL): Future[JsResult[ClassifyTaxonomy]] = {
-		val params = Seq(("url" -> url.toString))
-		get(new URL(config.apiUrl + "/classify/" + config.taxonomy), params).map { response =>
-			response.json.validate[ClassifyTaxonomy]
+		val params = Map("url" -> Seq(url.toString))
+		post(new URL(config.apiUrl + "/classify/" + config.taxonomy), params).flatMap { response =>
+			if (response.status == 200) {
+				Future.successful(response.json.validate[ClassifyTaxonomy])
+			} else {
+				Future.failed(AylienException(response.status, (response.json \ "error").as[String]))
+			}
+		}
+	}
+
+	/**
+	 * http://docs.aylien.com/docs/classify-taxonomy
+	 * 
+	 * @param text The text to analyise
+	 * @return A classification object or an [[AylienException]] on error
+	 */
+	def classifyByTaxonomy(text: String): Future[JsResult[ClassifyTaxonomy]] = {
+		val params = Map("text" -> Seq(text.replaceAll("\\<.*?\\>", ""))) 
+		post(new URL(config.apiUrl + "/classify/" + config.taxonomy), params).flatMap { response =>
+			if (response.status == 200) {
+				Future.successful(response.json.validate[ClassifyTaxonomy])
+			} else {
+				Future.failed(AylienException(response.status, (response.json \ "error").as[String]))
+			}
 		}
 	}
 
