@@ -13,6 +13,7 @@ object TaxonomyLink {
 final case class Category(
 	id: String,
 	confident: Boolean,
+	score: Option[Float],
 	label: String,
 	links: Set[TaxonomyLink])
 

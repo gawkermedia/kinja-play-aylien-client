@@ -62,7 +62,7 @@ final class TextApiClient(config: TextApiClientConfig) {
 	private def post(url: URL, params: Map[String, Seq[String]]): Future[WSResponse] = {
 		val request = config.client.url(url.toString)
 
-		logger.debug(s"GET $url")
+		logger.debug(s"POST $url")
 		logger.debug(s"params: $params")
 
 		request
