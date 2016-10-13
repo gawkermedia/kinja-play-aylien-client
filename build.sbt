@@ -1,5 +1,5 @@
 
-name := "play-aylien-client"
+name := "aylien-client-play25"
 
 organization := "com.kinja"
 
