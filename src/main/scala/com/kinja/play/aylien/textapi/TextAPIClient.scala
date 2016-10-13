@@ -54,7 +54,7 @@ final class TextApiClient(config: TextApiClientConfig) {
 				HeaderNames.ACCEPT -> MimeTypes.JSON,
 				"X-AYLIEN-TextAPI-Application-Key" -> config.appKey,
 				"X-AYLIEN-TextAPI-Application-ID" -> config.appId)
-			.withRequestTimeout(config.requestTimeout.toMillis.toLong)
+			.withRequestTimeout(config.requestTimeout)
 			.withQueryString(params:_*)
 			.get()
 	}
@@ -70,7 +70,7 @@ final class TextApiClient(config: TextApiClientConfig) {
 				HeaderNames.ACCEPT -> MimeTypes.JSON,
 				"X-AYLIEN-TextAPI-Application-Key" -> config.appKey,
 				"X-AYLIEN-TextAPI-Application-ID" -> config.appId)
-			.withRequestTimeout(config.requestTimeout.toMillis.toLong)
+			.withRequestTimeout(config.requestTimeout)
 			.post(params)
 	}
 
