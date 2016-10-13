@@ -1,6 +1,6 @@
 # Scala client for Aylien text analysis API
 
-It's a [Play! WS](https://www.playframework.com/documentation/2.4.x/ScalaWS) based API client for [Aylien's text analysis API](http://aylien.com/text-api).
+It's a [Play! 2.5 WS](https://www.playframework.com/documentation/2.5.x/ScalaWS) based API client for [Aylien's text analysis API](http://aylien.com/text-api).
 
 ## Usage example
 
