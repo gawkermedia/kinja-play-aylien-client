@@ -1,6 +1,6 @@
 # Scala client for Aylien text analysis API
 
-It's a [Play! 2.5 WS](https://www.playframework.com/documentation/2.5.x/ScalaWS) based API client for [Aylien's text analysis API](http://aylien.com/text-api).
+It's a [Play! 2.6 WS](https://www.playframework.com/documentation/2.6.x/ScalaWS) based API client for [Aylien's text analysis API](http://aylien.com/text-api).
 
 ## Usage example
 
@@ -14,7 +14,7 @@ val config = TextApiClientConfig(
 	System.getenv("AYLIEN_APP_KEY"),
 	"iab-qag",
 	scala.concurrent.duration.Duration("5 seconds"),
-	play.api.libs.ws.ning.NingWSClient(),
+	yourWSClient,
 	scala.concurrent.ExecutionContext.Implicits.global)
 
 val api = new TextApiClient(config)

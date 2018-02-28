@@ -50,12 +50,12 @@ final class TextApiClient(config: TextApiClientConfig) {
 		logger.debug(s"params: $params")
 
 		request
-			.withHeaders(
+			.withHttpHeaders(
 				HeaderNames.ACCEPT -> MimeTypes.JSON,
 				"X-AYLIEN-TextAPI-Application-Key" -> config.appKey,
 				"X-AYLIEN-TextAPI-Application-ID" -> config.appId)
 			.withRequestTimeout(config.requestTimeout)
-			.withQueryString(params:_*)
+			.withQueryStringParameters(params:_*)
 			.get()
 	}
 
@@ -66,7 +66,7 @@ final class TextApiClient(config: TextApiClientConfig) {
 		logger.debug(s"params: $params")
 
 		request
-			.withHeaders(
+			.withHttpHeaders(
 				HeaderNames.ACCEPT -> MimeTypes.JSON,
 				"X-AYLIEN-TextAPI-Application-Key" -> config.appKey,
 				"X-AYLIEN-TextAPI-Application-ID" -> config.appId)
@@ -86,7 +86,7 @@ final class TextApiClient(config: TextApiClientConfig) {
 			if (response.status == 200) {
 				Future.successful(response.json.validate[ClassifyTaxonomy])
 			} else {
-				Future.failed(AylienException(response.status, (response.json \ "error").as[String]))
+				Future.failed(AylienException(response.status, response.body))
 			}
 		}
 	}
@@ -103,7 +103,7 @@ final class TextApiClient(config: TextApiClientConfig) {
 			if (response.status == 200) {
 				Future.successful(response.json.validate[ClassifyTaxonomy])
 			} else {
-				Future.failed(AylienException(response.status, (response.json \ "error").as[String]))
+				Future.failed(AylienException(response.status, response.body))
 			}
 		}
 	}
